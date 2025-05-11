@@ -1,0 +1,27 @@
+{
+  "name": "littl3fo0t.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx @11ty/eleventy",
+    "start": "npx @11ty/eleventy --serve",
+    "watch": "npx @11ty/eleventy --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littl3fo0t/littl3fo0t.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/littl3fo0t/littl3fo0t.github.io/issues"
+  },
+  "homepage": "https://github.com/littl3fo0t/littl3fo0t.github.io#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
