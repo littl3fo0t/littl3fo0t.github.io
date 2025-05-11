@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
-    "watch": "npx @11ty/eleventy --watch"
+    "watch": "npx @11ty/eleventy --watch",
+    "deploy": "npm run build && gh-pages -d public"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/littl3fo0t/littl3fo0t.github.io#readme",
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "gh-pages": "^6.3.0"
   }
 }
