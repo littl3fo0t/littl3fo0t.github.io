@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/sakura-earthly.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .is-center {
+            text-align: center;
+        }
+
+        .profile-picture {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            height: auto;
+        }
+
+        .technologies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .technologies-container>a {
+            text-decoration: none;
+
+        }
+
+        .technologies-container>a>img {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .back-to-top {
+            text-align: right;
+        }
+
+        .timeline {
+            color: gray;
+        }
+
+        .is-16x16 {
+            width: 16px;
+            height: auto;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3px;
+        }
+    </style>
+    <title>Thomas Brun - Yu-Gi-Oh! Card Searching App (version 2)</title>
+</head>
+
+<body>
+    <main>
+        <p><a id="top"></a></p>
+<h1>Yu-Gi-Oh! Card Searching App (version 2)</h1>
+<h2>🔍 Project Overview</h2>
+<p>A card searching app for the Yu-Gi-Oh! (YGO) trading card game. Following in the foot steps of <a href="/en/projects/card-search-v1.html">version 1</a>, version 2 comes with the following improvements:</p>
+<ol>
+<li>It is now possible to search for a card by “fuzzy” name and level/rank/link value instead of just the exact name.</li>
+<li>UI now includes icons for all card properties and card art.</li>
+<li>Better looking UI (inspired by the <a href="https://www.masterduelmeta.com/">Yu-Gi-Oh! Master Duel Meta</a> website).</li>
+</ol>
+<p><a href="https://github.com/littl3fo0t/Yu-Gi-Oh-Card-App-v2">Project Link</a></p>
+<h3>❓ What Did I Learn?</h3>
+<h4>🚀 TL;DR</h4>
+<ol>
+<li>Installing and using <a href="https://redux.js.org/">Redux</a>.</li>
+<li>Creating a dedicated <code>types</code> folder to manage and keep track of all data types used across the project.</li>
+<li>Modifying the project’s <code>config</code> files to allow for the use of aliases.</li>
+<li>Union types.</li>
+<li>Implementing and extending Interfaces.</li>
+<li>The difference between <code>any</code> and <code>unknown</code> data types.</li>
+<li>Working with “nullable” variables.</li>
+<li>Working with JavaScript Sets (almost)</li>
+</ol>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🫙 Redux</h4>
+<p>Redux is a JavaScript library (and pattern) that provides a way to manage your application's state. It relies on a single <em>immutable</em> object (often referred to as a <strong>store</strong>) to manage all of the application's state. When the state of the application needs to be changed (like when a button is pressed for example), an <strong>action</strong>, which contains things like an event name and <strong>payload</strong> (which contains the data to be changed), will be <strong>dispatched</strong> to the store. But remember, the store is immutable, therefore to modify the application's state, an entirely new object is created by passing in the current state and the action's payload into a <strong>reducer</strong> function which returns the new object containing all of the application's state. This enables a one-way data flow that is both predictable and testable.</p>
+<h5>⚙️ Installing Redux</h5>
+<p>Redux can be installed into your project very easily by running the following command in your terminal:</p>
+<pre><code class="language-bash">npm install @reduxjs/toolkit
+</code></pre>
+<h5>🍕 Working with Redux</h5>
+<ol>
+<li>In your project's <code>src</code> directory, create a <code>store</code> file and import the <code>configureStore</code> to set up the global store object which will register any reducers defined elsewhere in the code:</li>
+</ol>
+<pre><code class="language-ts">
+import { configureStore } from &quot;@reduxjs/toolkit&quot;;
+import mySliceReducer from &quot;./mySlice&quot;; // reducer
+export const store = configureStore({
+    reducer: {
+        searchControls: searchControlsReducer,
+        cardData: cardDataReducer
+    }
+});
+</code></pre>
+<ol start="2">
+<li>Then within your <code>App</code> or <code>main</code> file, &quot;provide&quot; the store to make it accessible to your entire component tree:</li>
+</ol>
+<pre><code class="language-jsx">import { createRoot } from 'react-dom/client'
+import App from './App.jsx'
+import { Provider } from &quot;react-redux&quot;
+import { store } from &quot;./store&quot;
+
+createRoot(document.getElementById('root')!).render(
+  &lt;Provider store={store}&gt;
+    &lt;App /&gt;
+  &lt;/Provider&gt;,
+)
+</code></pre>
+<ol start="3">
+<li>At this point you can create any number of <strong>slices</strong> to represent some data in the store. Each slice must have a unique name, an <strong>initial state</strong> and a collection of reducers which are functions that take in the old state, an action and the logic to modify the state based on that action. For example:</li>
+</ol>
+<pre><code class="language-js">import { createSlice } from &quot;@reduxjs/toolkit&quot;;
+
+export const mySlice = createSlice({
+    name: &quot;mySlice&quot;,
+    initialState: {},
+    reducers: {
+        resetMySlice: () =&gt; {
+            return {};
+        },
+        toggleCompleted: (state) =&gt; {
+            state.someToggle = !state.someToggle;
+        },
+        addToList: (state, action) =&gt; {
+            state.someList.push(action.payload);
+        }
+    }
+});
+</code></pre>
+<p>❗<strong>Note:</strong> you might be looking at the example above and think, &quot;wait, but you're modifying the state directly, didn't you mention that the store was supposed to be immutable?&quot;. That's thanks to the <code>createSlice</code> method from the Redux library which allows us to write logic as we would normally, then behind the scenes, Redux automatically redefines our logic in a &quot;pure&quot; way. For example, the <code>addToList</code> method from above becomes something like this:</p>
+<pre><code class="language-js">function addToList(state, action) {
+    return {
+        ...state,
+        someList: [...state.someList, action.payload]
+    };
+}
+</code></pre>
+<ol start="4">
+<li>Redux will automatically generate action functions which correspond to the names you've defined in the <code>reducers</code>, which you can then export and use throughout your application:</li>
+</ol>
+<pre><code class="language-js">export const { resetMySlice, toggleCompleted, addToList } = mySlice.actions;
+</code></pre>
+<p>You should also export your reducer here and import it in your store:</p>
+<pre><code class="language-js">export default mySlice.reducer;
+</code></pre>
+<ol start="5">
+<li>Now you can select data anywhere in your application with the <code>useSelector</code> hook, for example:</li>
+</ol>
+<pre><code class="language-jsx">import React from &quot;react&quot;;
+import { useDispatch, useSelector } from &quot;react-redux&quot;;
+
+function myList() {
+    const someList = useSelector(state =&gt; state.someList);
+
+    return (
+        &lt;&gt;
+            &lt;h1&gt;My List&lt;/h1&gt;
+            &lt;ol&gt;
+                {someList.map((item, index) =&gt; (
+                    &lt;li key={index}&gt;item.title&lt;/li&gt;
+                ))}
+            &lt;/ol&gt;
+        &lt;/&gt;
+    );
+}
+</code></pre>
+<ol start="6">
+<li>Finally, to change the application's data, an action will need to be dispatched from the store, which you can do using the <code>useDispatch</code> hook which might send an action with a payload which can be mapped to broswer events, such as clicking a button. For example:</li>
+</ol>
+<pre><code class="language-jsx">import React from &quot;react&quot;;
+import { useDispatch, useSelector } from &quot;react-redux&quot;;
+
+function myList() {
+    const someList = useSelector(state =&gt; state.someList);
+    const dispatch = useDispatch();
+
+    return (
+        &lt;&gt;
+            &lt;h1&gt;My List&lt;/h1&gt;
+            &lt;ol&gt;
+                {someList.map((item, index) =&gt; (
+                    &lt;li key={index}&gt;item.title&lt;/li&gt;
+                ))}
+            &lt;/ol&gt;
+            &lt;button onClick={() =&gt; dispatch(addToList(&quot;newItem&quot;))}&gt;Add Item&lt;/button&gt;
+        &lt;/&gt;
+    );
+}
+</code></pre>
+<h5>↔️ <code>createAsyncThunk</code> and <code>extraReducers</code></h5>
+<p>The <code>createAsyncThunk</code> method is used to create <code>async</code> functions <strong>outside</strong> of your slice. For example:</p>
+<pre><code class="language-ts">// /src/features/cardData/cardDataSlice.ts
+import { createAsyncThunk, createSlice, PayloadAction } from &quot;@reduxjs/toolkit&quot;;
+
+export const loadCardDataByName = createAsyncThunk&lt;
+    Card[],                     // Success return type
+    string,                     // Argument type of cardName
+    { rejectValue: string }     // Error type
+&gt;(
+    &quot;cardData/loadCardDataByExactName&quot;,
+    async (cardName, { rejectWithValue }) =&gt; {
+        try {
+            const endpoint = `${apiURL}name=${encodeURIComponent(cardName)}`;
+            return await fetchCardData(endpoint);
+        } catch (error: any) {
+            return rejectWithValue(error.message ?? &quot;Unknown error occured when trying to search by exact name&quot;);
+        }
+    }
+);
+</code></pre>
+<p>Then, <code>extraReducers</code> takes the information from our asynchronous functions and use that data to manipulate the global state. For example:</p>
+<pre><code class="language-ts">// /src/features/cardData/cardDataSlice.ts
+import { createAsyncThunk, createSlice, PayloadAction } from &quot;@reduxjs/toolkit&quot;;
+
+const cardDataInitialState: CardDataState = {
+    cards: null,
+    isLoadingCards: false,
+    failedToLoadCards: false,
+    error: null
+};
+
+export const cardDataSlice = createSlice({
+    name: &quot;cardData&quot;,
+    initialState: cardDataInitialState,
+    reducers: {
+        resetCardData: () =&gt; {
+            return cardDataInitialState;
+        }
+    },
+    extraReducers: (builder) =&gt; {
+        builder
+            .addCase(loadCardDataByName.pending, (state) =&gt; {
+                state.isLoadingCards = true;
+                state.failedToLoadCards = false;
+                state.cards = null;
+                state.error = null;
+            })
+            .addCase(loadCardDataByName.fulfilled, (state, action: PayloadAction&lt;Card[]&gt;) =&gt; {
+                state.isLoadingCards = false;
+                state.failedToLoadCards = false;
+                state.cards = action.payload;
+                state.error = null;
+            })
+            .addCase(loadCardDataByName.rejected, (state, action) =&gt; {
+                state.isLoadingCards = false;
+                state.failedToLoadCards = true;
+                state.cards = null;
+                state.error = typeof action.payload === &quot;string&quot; ? action.payload : &quot;Unexpected error occurred&quot;;
+            })
+            // rest of code omitted for brevity ...
+    }
+</code></pre>
+<p>As you should already know, <code>async</code> functions always return a Promise, which can either be <em>pending</em>, <em>fulfilled</em> or <em>rejected</em>.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>📁 Creating a <code>types</code> folder</h4>
+<p>The most common covention is to create the <code>types</code> folder within the <code>src</code> directory. Files here end with the <code>.types.ts</code> extension. For example:</p>
+<pre><code class="language-bash">&lt;your project name&gt;/
+    |- public/
+    |- src/
+        |- components/
+        |- features/
+        |- types/
+            |- card.type.ts
+            |- seachControls.type.ts
+</code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🔧 Modifying the <code>config</code> files to allow for the use of aliases</h4>
+<ol>
+<li>The first step is to modify the <code>tsconfig.app.json</code> file by adding the following, under the <code>compilerOptions</code>:</li>
+</ol>
+<pre><code class="language-json">{
+    &quot;compilerOptions&quot;: {
+        // more properties here...
+        &quot;baseUrl&quot;: &quot;./src&quot;,
+        &quot;paths&quot;: {
+            &quot;@/*&quot;: [&quot;./*&quot;],
+            &quot;@components/*&quot;: [&quot;components/*&quot;],
+            &quot;@features/*&quot;: [&quot;features/*&quot;],
+            &quot;@utils/*&quot;: [&quot;utils/*&quot;]
+        }
+    }
+}
+</code></pre>
+<ol start="2">
+<li>Then, within your terminal, run the following command in the root directory of your project:</li>
+</ol>
+<pre><code class="language-bash">npm install --save-dev @types/node
+</code></pre>
+<ol start="3">
+<li>Then open your <code>tsconfig.node.json</code> file and ensure it has the following under the <code>compilerOptions</code>:</li>
+</ol>
+<pre><code class="language-json">{
+    &quot;compilerOptions&quot;: {
+        // more properties here...
+        &quot;types&quot;: [&quot;node&quot;]
+    }
+}
+</code></pre>
+<ol start="4">
+<li>And finally, modify your <code>vite.config.ts</code> file as such:</li>
+</ol>
+<pre><code class="language-ts">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+});
+</code></pre>
+<p>All of these modifications allows us to import any necessary types as such:</p>
+<pre><code class="language-ts">import type { &lt;type name&gt; } from &quot;@/types/&lt;file name&gt;.types&quot;;
+</code></pre>
+<p>Instead of:</p>
+<pre><code class="language-ts">import type { &lt;type name&gt; } from &quot;../types/&lt;file name&gt;.types&quot;;
+</code></pre>
+<p>❗ <strong>Note:</strong> I think I might have messed up here, originally all of these modifications were intended to achieve something like this:</p>
+<pre><code class="language-ts">import type { &lt;type name&gt; } from &quot;@types/&lt;file name&gt;.types&quot;;
+</code></pre>
+<p>But despite spending hours on this issue and using AI to help me, I was only able to achieve the first import style.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🤓 Using Union Types and Implementing Interfaces</h4>
+<p>An example of a type file using interfaces and union types:</p>
+<pre><code class="language-ts">// /src/types/searchControls.types.ts
+
+export type SearchType = string | [number, number] | null; // =&gt; a union type
+// SearchType can be assigned a string, tuple ([number, number]) or null
+
+export interface SearchControls {
+    searchBy: string,
+    searchTerm: SearchTerm  // =&gt; using the union type in an interface
+};
+</code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>💪 Extending Interfaces</h4>
+<p>Since I knew somewhat the shape of the data that would be returned from the YGOPRODeck API, I created a &quot;base&quot; card interface which could then be extended:</p>
+<pre><code class="language-ts">// /src/types/card.types.ts
+
+export interface BaseCard {
+    name: string,
+    type: string,
+    frameType: string,
+    desc: string,
+    card_images: CardImages[],
+    race: string,
+    humanReadableCardType: string,
+    [key: string]: unknown
+};
+
+// ...
+
+export interface MonsterCard extends BaseCard {
+    typeline: string[],
+    atk: number,            // When -1, then attack = &quot;?&quot;
+    def: number | null,     // When -1, then defense = &quot;?&quot; (null for link monsters)
+    attribute: string,
+    level: number | null,   // Also includes Rank (null for link monsters)
+    linkval? : number,      // Only applicable to link monsters
+    pend_desc?: string,     // Only applicable to pendulum monsters
+    monster_desc?: string   // Only applicable to pendulum monsters
+};
+</code></pre>
+<p>If you've ever done object oriented programming, the concept is the same with the <code>MonsterCard</code> object inheriting all the properties of <code>BaseCard</code>.</p>
+<p>Also, <code>[key: string]: unknown</code> is to allow for additionally properties of unknown shape.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h5>⚔️ Optional Properties vs Allowing for <code>null</code></h5>
+<p>You might have noticed that in the <code>MonsterCard</code> interface above, I have some properties, such as <code>def</code> as being &quot;nullable&quot;, and I have some, such as <code>linkval</code> that are defined as optional (marked with a <code>?</code>) - what is the difference?
+Using YGO here to explain; in the game, all monster cards have a defense (DEF) property, with the exception of Link monsters, who instead have a link value (LINK). The way how the YGOPRODeck deals with this is by <strong>always</strong> returning the <code>def</code> property for monster cards but making it <code>null</code> for link monsters. On the other side, the <code>linkval</code> property is ONLY for link monsters, thus making it <strong>optional</strong>.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h5>⚔️ <code>any</code> vs <code>unknown</code></h5>
+<p>As you might alway know, TypeScript offers some solutions to work with values of unknown type or shape. You can either decide to opt out of type checking altogether by annotating your variable with the <code>any</code> keyword, or you can use <code>unknown</code>. The latter is generally considered safer as <code>unknown</code> does <strong>not</strong> opt you out of type checking and instead forces you to check the type of the variable before you can use it.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>⚠️ A word of Caution when working with &quot;nullable&quot; variables</h4>
+<p>I thought I was being smart by allowing certain values to be <code>null</code> in my project, and honestly, it makes sense in practice. For example, going back to the <code>searchTerm</code> variable shown above, which is supposed to hold any necessary parameters when fetching card data. For example, if the user desires to search for a card by exact name, then <code>searchTerm</code> holds a <code>string</code> value corresponding to the card name being searched. However, my original plan for the app included the option for the user to be able to simply view a random card. In this case, they do <strong>not</strong> need to provide any additional parameters. Therefore, it makes sense to set the <code>searchTerm</code> to <code>null</code>, to explicitly indicate to any developer that we are not expecting a value for it, rather than assigning an empty string to it, which might be ambiguous.
+What I had failed to anticipate however was that, I would need to validate each individual &quot;nullable&quot; variable before I could use it, adding a lot of complexity to the project. The way how I dealt with this at first was by accommodating for the possibility of <code>null</code> everywhere I would use a &quot;nullable&quot; variable. For example, let's say with a component that accepts props for some internal logic, I would write something like this:</p>
+<pre><code class="language-ts">// /src/components/ViewCard.tsx
+
+// assume a monsterCard variable of type MonsterCard has been defined above
+{(&quot;def&quot; in monsterCard &amp;&amp; monsterCard.def !== null) &amp;&amp; 
+    &lt;MonsterDEF def={monsterCard.def} /&gt;
+}
+</code></pre>
+<p>❗ <strong>Note:</strong> I had to explicitly check by comparing <code>monsterCard.def</code> to <code>null</code>. This is because, <code>def</code> is a numeric value which can sometimes be equal to 0. When that happens, it is treated as a &quot;falsy&quot; value instead of checking whether it is equal to <code>null</code> or not, leading to unexpected behaviors.</p>
+<p>Then in the <code>MonsterDEF</code> component, I would accommodate for the &quot;nullable&quot; <code>def</code> value as such:</p>
+<pre><code class="language-ts">// /src/components/MonsterDEF.tsx
+
+interface MonsterDEFProps {
+    def: number | null
+};
+
+const MonsterDEF: React.FC&lt;MonsterDEFProps&gt; = ({ def }) =&gt; {
+    // ...
+};
+</code></pre>
+<p>However, this is less than ideal in the long run as it causes a significant amount of code duplication.
+Later (and by that I mean, much later), I did come up with a better solution for dealing with &quot;nullable&quot; values which involved using local variables as &quot;pass by&quot;. For example, if you look at the <code>src/types/cardData.types.ts</code> file, you will see that I have defined an <code>error</code> property which can either be equal to a <code>string</code> value or <code>null</code>. When using it in the <code>src/App.tsx</code> file, I simply defined a local <code>error</code> variable to keep track of the error state:</p>
+<pre><code class="language-ts">// /src/App.tsx
+
+// omitted logic for brevity...
+
+const errorMessage = useSelector(getErrorMessage);  // =&gt; error state from store
+const [error, setError] = useState(&quot;&quot;);             // =&gt; local error variable
+const failedToLoad = useSelector(failedToLoadcards);
+</code></pre>
+<p>Then we can keep track of changes in the error state using a <code>useEffect</code> hook:</p>
+<pre><code class="language-ts">// /src/App.tsx
+
+// ...
+
+useEffect(() =&gt; {
+    if (failedToLoad &amp;&amp; errorMessage) {
+        setError(errorMessage);
+    } else {
+        setError(&quot;&quot;);
+    }
+}, [failedToLoad, dispatch]);
+</code></pre>
+<p>Then all we need to worry about is the <code>failedToLoad</code> state:</p>
+<pre><code class="language-ts">// /src/App.tsx
+
+// ...
+
+{failedToLoad &amp;&amp; &lt;Error error={error} /&gt;}
+</code></pre>
+<p>Then in the <code>Error</code> component:</p>
+<pre><code class="language-ts">// /src/components/Error.tsx
+
+interface ErrorProps {
+    error: string   // =&gt; no need to worry about null!
+}
+</code></pre>
+<p>😬 Admittedly, the use of <code>useEffect</code> hooks could add unnecessary overhead and impact the performance of your app. However, in my case, I believed the trade off was worth it by making my code more manageable and cleaner.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🧮 Sets in JavaScript</h4>
+<p>In JavaScript, a <code>Set</code> object can store <strong>unique</strong> values of any type. They work in a similar way to arrays, with the exception that each value in a set can <strong>only occur once</strong>. For example:</p>
+<pre><code class="language-js">const mySet = new Set([1, 2, 2, 3]);
+console.log(mySet); // output: Set(3) {1, 2, 3}
+</code></pre>
+<p>After this, you can convert your sets to arrays with the <code>Array.from</code> method:</p>
+<pre><code class="language-js">const myArray = Array.from(mySet);
+console.log(myArray) //output: (3) [1, 2, 3]
+</code></pre>
+<p>This property of sets allow from some very interesting methods which I had planned to leverage for my app, however it didn't turn out quite the way I wanted it to. But first some context; as mentioned above, this version of the Yu-Gi-Oh! Card Searching App has the option to search for cards by <em>Level</em> (which also includes <em>Rank</em> and <em>Link Value</em>):
+<img src="/assets/images/search-by-level.png" alt="Search by Level"></p>
+<p>While the YGOPRODeck API does indeed support searching for cards by level, there is a catch. You see, when searching for cards with levels that <strong>match</strong>, we can easily use the following URL: <code>https://db.ygoprodeck.com/api/v7/cardinfo.php?level={level}</code> or <code>https://db.ygoprodeck.com/api/v7/cardinfo.php?linkval={level}</code> (for link monsters). Logic would dictate that when search for cards with levels that <strong>do not match</strong>, we could use something like this:</p>
+<pre><code class="language-txt">https://db.ygoprodeck.com/api/v7/cardinfo.php?level=gte{minLevel}&amp;level=lte{maxLevel}
+</code></pre>
+<p>Where <code>gte</code> stands for &quot;greater than or equal to&quot; and <code>lte</code>, &quot;less than or equal to&quot; - so in other words, return all cards with a level <strong>between</strong> <code>minLevel</code> and <code>maxLevel</code>. But that is <strong>not</strong> the case! Should you try to copy and paste the above link in your broswer URL bar and press <kbd>Enter</kbd>, you will see that the API returns <strong>all</strong> cards with a level greater than or equal to <code>minLevel</code> and <strong>all</strong> cards less than or equal to <code>maxLevel</code> (in other words, <strong>every</strong> monster card with a level).</p>
+<p>As such, my first approach for searching for cards by level that do not match, I would fetch the card data in two parts; first with the <code>minLevel</code> <code>(https://db.ygoprodeck.com/api/v7/cardinfo.php?level=gte{minLevel}</code>) and second with <code>maxLevel</code> (<code>https://db.ygoprodeck.com/api/v7/cardinfo.php?level=lte{maxLevel}</code>), save the results in separate <code>Card</code> sets and use the <code>intersection</code> method to return the common elements from both sets:</p>
+<pre><code class="language-js">const mySet = new Set([1, 2, 2, 3]);
+const newSet = new Set([4, 2, 3]);
+console.log(mySet.intersection(newSet)); // output: Set(2) {2, 3}
+</code></pre>
+<p>However, this was not to be, for the simple reason that my sets were sets of <code>Card</code> objects and JavaScript compares objects by <strong>reference</strong>, not by <strong>value</strong>. As such, when I tried to use the <code>intersection</code> method, it would return nothing. So I had to go back at the drawing board. If you want to see how I implemented the logic for this part, feel free to click on the Project Link above to view the code on GitHub.</p>
+<p>❗<strong>Note:</strong> as of writing this, the <code>intersection</code> method is currently still in the <strong>proposal</strong> state, which means it is not yet natively supported in all JavaScript environments.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+    </main>
+    
+        
+
+
+
+<div class="project-navigation">
+    <input
+        class="previous-project"
+        type="button" 
+        
+            onclick="location.href='/en/projects/todo-app.html';"
+            value="Previous Project"
+        
+    >
+    
+</div>
+    
+    <hr>
+    <footer>
+    <a href="/en/">English</a> | <a href="/fr/">Français</a>
+    <p>
+        &copy; 2025 Thomas Brun (<a href="mailto:thomas.brun.1703@hotmail.com">thomas.brun.1703@hotmail.com</a>)
+        <br>
+        Website built using <a href="https://www.11ty.dev/" target="_blank" rel="noopener noreferrer">11ty</a>, styled
+        with <a href="https://github.com/oxalorg/sakura" target="_blank" rel="noopener noreferrer">sakura</a>
+        and syntax highlighting with <a href="https://prismjs.com/" target="_blank" rel="noopener noreferrer">Prism</a>.
+    </p>
+</footer>
+    <script src="/assets/js/prism.js"></script>
+</body>
+
+</html>

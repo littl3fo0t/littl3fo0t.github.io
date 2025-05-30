@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/sakura-earthly.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .is-center {
+            text-align: center;
+        }
+
+        .profile-picture {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            height: auto;
+        }
+
+        .technologies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .technologies-container>a {
+            text-decoration: none;
+
+        }
+
+        .technologies-container>a>img {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .back-to-top {
+            text-align: right;
+        }
+
+        .timeline {
+            color: gray;
+        }
+
+        .is-16x16 {
+            width: 16px;
+            height: auto;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3px;
+        }
+    </style>
+    <title>Thomas Brun - Yu-Gi-Oh! Card Searching App (version 1)</title>
+</head>
+
+<body>
+    <main>
+        <p><a id="top"></a></p>
+<h1>Yu-Gi-Oh! Card Searching App (version 1)</h1>
+<h2>🔍 Project Overview</h2>
+<p>A simple app to search and retrieve card details for the <strong>Yu-Gi-Oh! Trading Card Game</strong> built using vanilla JavaScript, data provided by the <a href="https://ygoprodeck.com/api-guide/">YGOPRODeck API</a> and styling done using <a href="https://bulma.io/">Bulma CSS</a>.</p>
+<p><a href="https://github.com/littl3fo0t/Yu-Gi-Oh-Card-App">Project Link</a></p>
+<h3>❓ What Did I Learn?</h3>
+<h4>🚀 TL;DR</h4>
+<ol>
+<li>Using the <code>async</code> and <code>await</code> keywords and working with Promises.</li>
+<li>Fetching data from an API.</li>
+<li>Managing state in vanilla JavaScript.</li>
+</ol>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🔁 <code>async</code> Functions</h4>
+<p>The <code>async</code> keyword can <strong>only</strong> be used with functions and indicates that this function will be performing <em>asynchronous</em> operations - meaning it can run tasks in the background without blocking the main flow of the program. This is an essential component for network requests.</p>
+<pre><code class="language-js">const thisFunction = async () =&gt; {
+    // function body ...
+};
+</code></pre>
+<p><strong>OR</strong></p>
+<pre><code class="language-js">async function thatFunction() {
+    // function body ...
+}
+</code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🔜 Promises in JavaScript</h4>
+<p>A <strong>Promise</strong> is an object representing the eventual completion (or failure) of an asynchronous operation. A Promise does not give us a result immediately, but <em>guarantees</em> that we will eventually get one - whether it is a success or failure.</p>
+<p>Promises are a &quot;relatively&quot; new feature introduced in <strong>ES2017</strong> and provide a more clean, structured and readable way to implement asynchronous code in JavaScript, making it look and behave more like synchronous code.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🛃 Managing State in Vanilla JavaScript</h4>
+<p>Unlike a modern web framework like React or Vue, when using vanilla JavaScript, there is no way to automatically re-render the elements on screen when the state of the application changes. Additionally, we have no way of automatically binding our HTML elements to the code and instead need to manually grab the DOM elements and modify their state accordingly. For example, assume we have some HTML that looks like this:</p>
+<pre><code class="language-html">&lt;div class=&quot;is-hidden&quot; id=&quot;errorMessage&quot;&gt;
+    &lt;article class=&quot;message is-danger&quot;&gt;
+        &lt;div class=&quot;message-header&quot;&gt;
+            &lt;p&gt;Error&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;message-body&quot;&gt;&lt;/div&gt;
+    &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Using vanilla JavaScript, we must grab the necessary DOM elements:</p>
+<pre><code class="language-js">const errorMsgBody = document.querySelector(&quot;div.message-body&quot;);
+const errorMsgContainer = document.getElementById(&quot;errorMessage&quot;);
+</code></pre>
+<p>And then manually change their content and/or show condition:</p>
+<pre><code class="language-js">form.addEventListener(&quot;submit&quot;, async event =&gt; {
+    // Prevent page from refreshing
+    event.preventDefault();
+
+    // Get card name from input field
+    const cardName = input.value;
+
+    // Validate card name
+    if (!cardName) {
+        errorMsgBody.textContent = &quot;Please enter a valid card name.&quot;;
+        errorMsgContainer.className = &quot;container&quot;;
+        return;
+    }
+    else {
+        // Clear any error messages
+        errorMsgBody.textContent = &quot;&quot;;
+        errorMsgContainer.className = &quot;is-hidden&quot;;
+
+        // Rest of code omitted for brevity
+    }
+});
+</code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🤔 Why even use Vanilla JavaScript?</h4>
+<p>As a mentioned in the <code>README</code> text of this project, the idea for this came to me after having completed a JavaScript course. I was ago to undertake the next logical step - a React course - when it occurred to me that, in order to understand the &quot;messy&quot; parts of web development that modern frameworks tend to abstract and hide from you, I needed to create something in vanilla JavaScript in order to fully appreciate what these frameworks do for us.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+    </main>
+    
+        
+
+
+
+<div class="project-navigation">
+    <input
+        class="previous-project"
+        type="button" 
+        
+            
+                onclick="location.href='/en/about/';"
+            
+            value="Return to About Page"
+        
+    >
+    
+        <input
+            class="next-project"
+            type="button"
+            onclick="location.href='/en/projects/todo-app.html';"
+            value="Next Project"
+        >
+    
+</div>
+    
+    <hr>
+    <footer>
+    <a href="/en/">English</a> | <a href="/fr/">Français</a>
+    <p>
+        &copy; 2025 Thomas Brun (<a href="mailto:thomas.brun.1703@hotmail.com">thomas.brun.1703@hotmail.com</a>)
+        <br>
+        Website built using <a href="https://www.11ty.dev/" target="_blank" rel="noopener noreferrer">11ty</a>, styled
+        with <a href="https://github.com/oxalorg/sakura" target="_blank" rel="noopener noreferrer">sakura</a>
+        and syntax highlighting with <a href="https://prismjs.com/" target="_blank" rel="noopener noreferrer">Prism</a>.
+    </p>
+</footer>
+    <script src="/assets/js/prism.js"></script>
+</body>
+
+</html>

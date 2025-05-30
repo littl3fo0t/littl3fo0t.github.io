@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/sakura-earthly.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .is-center {
+            text-align: center;
+        }
+
+        .profile-picture {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            height: auto;
+        }
+
+        .technologies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .technologies-container>a {
+            text-decoration: none;
+
+        }
+
+        .technologies-container>a>img {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .back-to-top {
+            text-align: right;
+        }
+
+        .timeline {
+            color: gray;
+        }
+
+        .is-16x16 {
+            width: 16px;
+            height: auto;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3px;
+        }
+    </style>
+    <title>Thomas Brun - To-Do List</title>
+</head>
+
+<body>
+    <main>
+        <p><a id="top"></a></p>
+<h1>To-Do List</h1>
+<h2>🔍 Project Overview</h2>
+<p>A simple Todo app where the user can create a todo list and mark each item as complete as they go. This was my first time coding outside of the <a href="https://www.codecademy.com/">Codecademy</a> environment while enrolled in their <a href="https://www.codecademy.com/learn/paths/advanced-react-redux-sp">Create an Advanced Web App with React and Redux</a> Skill Path. I wanted to challenge myself by creating a simple app that would use <a href="https://vite.dev/">Vite</a> as the build tool instead of the traditional Create React App CLI, which I had been using up to this point, as well as <a href="https://www.typescriptlang.org/">TypeScript</a> instead of JavaScript.</p>
+<h3>❓ What Did I Learn?</h3>
+<h4>🚀 TL;DR</h4>
+<ol>
+<li>Creating a React app using Vite.</li>
+<li>The differences between creating a React app with Vite versus Create React App.</li>
+<li>TypeScript and it's importance in detecting issues early.</li>
+</ol>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>⚔️ Vite vs Create React App (CRA)</h4>
+<p>Typically, you would use the following command to create a React app:</p>
+<pre><code class="language-bash">npx create-react-app@latest &lt;your project name&gt;
+</code></pre>
+<p>Whereas a Vite app would be created like this:</p>
+<pre><code class="language-bash">npm create vite@latest
+</code></pre>
+<p>After which, you would be prompted with a few questions:</p>
+<pre><code class="language-bash">Project name: &lt;your project name&gt;
+Select a framework: &lt;your framework of choice (e.g., React, Vue, etc.)&gt;
+Select a variant: &lt;TypeScript OR JavaScript&gt;
+</code></pre>
+<p>Regardless of how you create your React app, the next step is to <code>cd</code> into the project folder and install dependencies:</p>
+<pre><code class="language-bash">npm install
+</code></pre>
+<p>You can then run your app in <strong>dev</strong> mode using:</p>
+<pre><code class="language-bash"># Using CRA:
+npm start
+
+# Using Vite:
+npm run dev
+</code></pre>
+<p>In short, Vite is a more modern, faster, and flexible option compared to CRA, which is older, slower, and more opinionated.</p>
+<p>From my experience, an essential feature of modern app/website development is 🔥 Hot Module Replacement (HMR), which allows changes to be reflected in the browser automatically without needing to refresh and lose app state. This happens when you save changes to a file. While HMR is a built-in feature in both CRA and Vite, it is noticeably faster and more reliable in Vite.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🤔 Why Use TypeScript?</h4>
+<p>Story time: while I was learning React on Codecademy, I reached one of their milestone projects that involved creating an app to manage contacts and appointments. This was still early in the Skill Path and was meant to be completed using React only (no Redux). As such, to manage the app's state, I had to define all necessary data and functions in the <code>App.js</code> file, passing them down as props to child components. It looked something like this:</p>
+<pre><code class="language-js">// /src/App.js
+
+// assume necessary imports and logic for Appointments are in place
+const [contacts, setContacts] = useState([]);
+
+const addContact = (name, email, phone) =&gt; {
+    setContacts(prevContacts =&gt; [...prevContacts, { name, email, phone }]);
+};
+</code></pre>
+<p>The <code>addContact</code> function then needed to be passed into the <code>Contacts</code> page and then into the <code>ContactForm</code> component where it would be used in the form's <code>onSubmit</code> handler:</p>
+<p><code>App.js &gt; Contacts.js &gt; ContactForm.js</code></p>
+<p>However, once I reached the <code>ContactForm.js</code> file, I made a silly mistake:</p>
+<pre><code class="language-js">// assume the name, email, and phone variables are defined with useState
+
+const handleSubmit = e =&gt; {
+    e.preventDefault();
+
+    // more omitted logic
+
+    const newContact = { name, email, phone };
+    addContact(newContact); // ❌ wrong usage
+};
+</code></pre>
+<p>And of course, JavaScript being JavaScript, I received <strong>zero</strong> warnings or error messages — until I pressed the Submit button. Since I had already finished with <code>App.js</code>, it took me hours to trace the bug. I even tried using Google's Gemini to assist me. Eventually, I realized that I had passed a single object to <code>addContact</code>, which was expecting three arguments.</p>
+<p>That’s when I decided to look for a way to prevent this kind of error — and the answer was TypeScript.</p>
+<p>With TypeScript, I could have defined the shape of the <code>addContact</code> function using an interface, and passed that into the component props. For example:</p>
+<pre><code class="language-ts">// /src/components/ContactForm.tsx
+
+interface ContactFormProps {
+    // additional props...
+    addContact: (name: string, email: string, phone: string) =&gt; void;
+}
+</code></pre>
+<p>Then used it in the component:</p>
+<pre><code class="language-ts">export const ContactForm: React.FC&lt;ContactFormProps&gt; = ({ addContact }) =&gt; {
+    // ...
+};
+</code></pre>
+<p>Had I tried to use <code>addContact</code> the wrong way, my IDE would have warned me immediately, and I could have fixed it on the spot.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+    </main>
+    
+        
+
+
+
+<div class="project-navigation">
+    <input
+        class="previous-project"
+        type="button" 
+        
+            onclick="location.href='/en/projects/card-search-v1.html';"
+            value="Previous Project"
+        
+    >
+    
+        <input
+            class="next-project"
+            type="button"
+            onclick="location.href='/en/projects/card-search-v2.html';"
+            value="Next Project"
+        >
+    
+</div>
+    
+    <hr>
+    <footer>
+    <a href="/en/">English</a> | <a href="/fr/">Français</a>
+    <p>
+        &copy; 2025 Thomas Brun (<a href="mailto:thomas.brun.1703@hotmail.com">thomas.brun.1703@hotmail.com</a>)
+        <br>
+        Website built using <a href="https://www.11ty.dev/" target="_blank" rel="noopener noreferrer">11ty</a>, styled
+        with <a href="https://github.com/oxalorg/sakura" target="_blank" rel="noopener noreferrer">sakura</a>
+        and syntax highlighting with <a href="https://prismjs.com/" target="_blank" rel="noopener noreferrer">Prism</a>.
+    </p>
+</footer>
+    <script src="/assets/js/prism.js"></script>
+</body>
+
+</html>
