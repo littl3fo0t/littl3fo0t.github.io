@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/sakura-earthly.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .is-center {
+            text-align: center;
+        }
+
+        .profile-picture {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            height: auto;
+        }
+
+        .technologies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .technologies-container>a {
+            text-decoration: none;
+
+        }
+
+        .technologies-container>a>img {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .back-to-top {
+            text-align: right;
+        }
+
+        .timeline {
+            color: gray;
+        }
+
+        .is-16x16 {
+            width: 16px;
+            height: auto;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3px;
+        }
+    </style>
+    <title>Thomas Brun - Application de recherche de Cartes Yu-Gi-Oh! (version 1)</title>
+</head>
+
+<body>
+    <main>
+        <p><a id="top"></a></p>
+<h1>Application de recherche de Cartes Yu-Gi-Oh! (version 1)</h1>
+<h2>🔍 Aperçu du projet</h2>
+<p>Une application simple pour rechercher et récupérer les détails des cartes du jeu de cartes à collectionner Yu-Gi-Oh!, conçue avec JavaScript vanilla. Les données proviennent de <a href="https://ygoprodeck.com/api-guide/">l'API YGOPRODeck</a> et le style est réalisé avec <a href="https://bulma.io/">Bulma CSS</a>.</p>
+<p><a href="https://github.com/littl3fo0t/Yu-Gi-Oh-Card-App">Lien du projet</a></p>
+<h2>❓ Ce que j'ai appris</h2>
+<h3>🚀 En bref</h3>
+<ol>
+<li>L'utilisation des fonctionnalités <code>async</code> et <code>await</code>, et des Promises.</li>
+<li>La récupération de données depuis une API.</li>
+<li>La gestion de l'éta (state management) en JavaScript vanilla.</li>
+</ol>
+<p class="back-to-top">(<a href="#top">retour à l'aperçu</a>)</p>
+<h3>🔁 Fonctions <code>async</code></h3>
+<p>Le mot-clé <code>async</code> ne peut être utilisé qu'avec des fonctions. Il indique que cette fonction effectuera des opérations asynchrones, ce qui signifie qu'elle peut exécuter des tâches en arrière-plan sans bloquer le déroulement principal du programme. C'est un composant essentiel pour les requêtes réseau.</p>
+<pre><code class="language-js">const thisFunction = async () =&gt; {
+    // reste de la fonction ...
+};
+</code></pre>
+<p><strong>OU</strong></p>
+<pre><code class="language-js">async function thatFunction() {
+    // reste de la fonction ...
+}
+</code></pre>
+<p class="back-to-top">(<a href="#top">retour à l'aperçu</a>)</p>
+<h3>🔜 Les Promises en JavaScript</h3>
+<p>Une <strong>Promise</strong> est un objet qui représente l'achèvement éventuel (ou l'échec) d'une opération asynchrone. Une Promise ne nous donne pas un résultat immédiat, mais garantit que nous en obtiendrons un éventuellement, qu'il s'agisse d'un succès ou d'un échec.</p>
+<p>Les Promises sont une fonctionnalité &quot;relativement&quot; nouvelle introduite dans <strong>ES2017</strong>. Elles offrent un moyen plus propre, structuré et lisible d'implémenter du code asynchrone en JavaScript, le faisant ressembler et se comporter davantage comme du code synchrone.</p>
+<p class="back-to-top">(<a href="#top">retour à l'aperçu</a>)</p>
+<h3>🛃 Gestion de l'état en JavaScript vanilla</h3>
+<p>Contrairement aux frameworks web modernes comme React ou Vue, lorsque vous utilisez JavaScript vanilla, il n'y a aucun moyen de rafraîchir automatiquement les éléments à l'écran lorsque l'état de l'application change. De plus, nous n'avons aucun moyen de lier automatiquement nos éléments HTML au code et devons plutôt saisir manuellement les éléments du DOM et modifier leur état en conséquence. Par exemple, supposons que nous ayons du HTML qui ressemble à ceci:</p>
+<pre><code class="language-html">&lt;div class=&quot;is-hidden&quot; id=&quot;errorMessage&quot;&gt;
+    &lt;article class=&quot;message is-danger&quot;&gt;
+        &lt;div class=&quot;message-header&quot;&gt;
+            &lt;p&gt;Error&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;message-body&quot;&gt;&lt;/div&gt;
+    &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Ensuite, nous devons récupérer les éléments du DOM:</p>
+<pre><code class="language-js">const errorMsgBody = document.querySelector(&quot;div.message-body&quot;);
+const errorMsgContainer = document.getElementById(&quot;errorMessage&quot;);
+</code></pre>
+<p>Et modifiez manuellement leur contenu:</p>
+<pre><code class="language-js">form.addEventListener(&quot;submit&quot;, async event =&gt; {
+    // Empêcher l'actualisation de la page
+    event.preventDefault();
+
+    // Obtenir le nom de la carte
+    const cardName = input.value;
+
+    // Valider le nom de la carte
+    if (!cardName) {
+        errorMsgBody.textContent = &quot;Please enter a valid card name.&quot;;
+        errorMsgContainer.className = &quot;container&quot;;
+        return;
+    }
+    else {
+        // Effacer tous les messages d'erreur
+        errorMsgBody.textContent = &quot;&quot;;
+        errorMsgContainer.className = &quot;is-hidden&quot;;
+
+        // Le reste du code a été omis pour des raisons de brièveté ...
+    }
+});
+</code></pre>
+<p class="back-to-top">(<a href="#top">retour à l'aperçu</a>)</p>
+<h3>🤔 Pourquoi utiliser JavaScript vanilla?</h3>
+<p>Comme mentionné dans le fichier <code>README</code> de ce projet, l'idée m'est venue après avoir terminé un cours de JavaScript. J'étais sur le point d'entreprendre l'étape logique suivante – un cours sur React – quand il m'est apparu que, pour comprendre les aspects &quot;complexes&quot; du développement web que les frameworks modernes ont tendance à abstraire et à cacher, j'avais besoin de créer quelque chose en JavaScript vanilla afin d'apprécier pleinement ce que ces frameworks nous offrent.</p>
+<p class="back-to-top">(<a href="#top">retour à l'aperçu</a>)</p>
+    </main>
+    
+        
+
+
+
+<div class="project-navigation">
+    <input
+        class="previous-project"
+        type="button" 
+        
+            
+                onclick="location.href='/fr/a-propos/';"
+            
+            value="Retour à la page À Propos"
+        
+    >
+    
+</div>
+    
+    <hr>
+    <footer>
+    <a href="/en/">English</a> | <a href="/fr/">Français</a>
+    <p>
+        &copy; 2025 Thomas Brun (<a href="mailto:thomas.brun.1703@hotmail.com">thomas.brun.1703@hotmail.com</a>)
+        <br>
+        
+            Ce site Web a été créé avec <a href="https://www.11ty.dev/" target="_blank" rel="noopener noreferrer">11ty</a>, 
+            stylisé avec <a href="https://github.com/oxalorg/sakura" target="_blank" rel="noopener noreferrer">sakura</a> 
+            et coloration syntaxique par <a href="https://prismjs.com/" target="_blank" rel="noopener noreferrer">Prism</a>.
+        
+        
+    </p>
+</footer>
+    <script src="/assets/js/prism.js"></script>
+</body>
+
+</html>
