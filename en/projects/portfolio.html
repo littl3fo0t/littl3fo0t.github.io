@@ -85,7 +85,185 @@
 
 <body>
     <main>
-        <h1>WIP</h1>
+        <h1>Portfolio Website</h1>
+<h2>🔍 Project Overview</h2>
+<p>My portfolio website developed using <a href="https://www.11ty.dev/">Eleventy (11ty)</a> with the  <a href="https://www.11ty.dev/docs/i18n/">Internationalization (I18n)</a> plugin, and deployed to <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+<p><a href="https://github.com/littl3fo0t/portfolio-11ty">Project Link</a> | <a href="https://littl3fo0t.github.io/">Demo</a></p>
+<h2>❓ What Did I Learn?</h2>
+<h3>🚀 TL;DR</h3>
+<ol>
+<li>Setting up an 11ty project.</li>
+<li>Setting up and building a multilingual website with the I18n plugin.</li>
+<li>Wroking with <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a> (<code>.njk</code>) files.</li>
+<li>Working with collections in 11ty.</li>
+<li>Deploying a portfolio website to GitHub Pages.</li>
+</ol>
+<h3>⛔ Disclaimer</h3>
+<p>A small disclaimer before going any further; as the time of writing, 11ty is by far the most difficult technology I have worked with. It is extremely error prone with very generic error messages that make debugging hard. Most of the difficulty in this projects stems from the I18n plugin and the 11ty website itself having the bare minimum amount of documentation.</p>
+<p>As usual with these project pages, I have done my best to fact-check everything I write. However, in this case, I have instead chosen to just leave a link to a relevant website regarding aspects that I did not fully comprehend. I’ll make sure to point these out as they appear.</p>
+<h3>📁 Setting up a Project with 11ty</h3>
+<p>Creating an 11ty project is very easy, the only prerequisite is to have <code>node</code> installed on your computer, then you can follow the instructions below:</p>
+<ol>
+<li>Create your project directory and <code>cd</code> into it.</li>
+<li>Open your terminal and run the following command to create a <code>package.json</code> file with the default settings:</li>
+</ol>
+<pre><code class="language-bash">npm init -y
+</code></pre>
+<ol start="3">
+<li>Then install 11ty with the following command:</li>
+</ol>
+<pre><code class="language-bash">npm install --save-dev @11ty/eleventy
+</code></pre>
+<p><strong>Optional step:</strong> you can also create a <code>.gitignore</code> file which includes the <code>node_modules</code> folder.</p>
+<h4>🔧 Configuring your 11ty Project</h4>
+<p>If you've followed the above instructions and take a look at your project directory, you'll see that with the exception of <code>node_modules</code>, <code>package.json</code> and <code>package-lock.json</code> (and <code>.gitignore</code> optionally), there is <strong>nothing</strong> else. This is normal, since 11ty is a &quot;zero-config&quot; tool by default. The next steps involve creating a <code>src</code> folder with a <code>.eleventy.js</code> (which will contain all of your project configuration). The <code>.eleventy.js</code> should look something like this:</p>
+<pre><code class="language-js">module.exports = function (eleventyConfig) {
+  return {
+    dir: {
+      input: &quot;src&quot;     // this will contain all of your project files
+    }
+  };
+};
+</code></pre>
+<p>So, to summarize, at this stage, your project structure should look like something like this:</p>
+<pre><code class="language-bash">&lt;your project name&gt;/
+    |- src/
+    |- .eleventy.js/
+    |- .gitignore
+    |- package-lock.json
+    |- package.json
+</code></pre>
+<p>At this point, you can run the following command to test if 11ty has been successfully installed:</p>
+<pre><code class="language-bash">npx @11ty/eleventy
+</code></pre>
+<p>And you should see something like this:</p>
+<pre><code class="language-bash">[11ty] Wrote 0 files in 0.03 seconds (v3.1.0)
+</code></pre>
+<p>❗<strong>Note:</strong> at the time of writing, the latest version of 11ty is 3.1.0, yours might differ.</p>
+<h4>✨ Optional Step – Implement Custom Build Commands</h4>
+<p>Another optional, but highly recommended step, is to overwrite the default 11ty commands. This is done in the <code>package.json</code> file, under the <code>scripts</code> attribute by adding the following:</p>
+<pre><code class="language-json">{
+    &quot;scripts&quot;: {
+        &quot;build&quot;: &quot;npx @11ty/eleventy&quot;,
+        &quot;start&quot;: &quot;npx @11ty/eleventy --serve&quot;,
+        &quot;watch&quot;: &quot;npx @11ty/eleventy --watch&quot;
+  }
+}
+</code></pre>
+<p>If you do this, you can use the following commands instead of the default ones:</p>
+<table>
+    <tr>
+        <th>Default Command</th>
+        <th>Custom Command</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td><code>npx @11ty/eleventy</code></td>
+        <td><code>npm run build</code></td>
+        <td>Used to build the website</td>
+    </tr>
+    <tr>
+        <td><code>npx @11ty/eleventy --serve</code></td>
+        <td><code>npm start</code></td>
+        <td>
+            Used to serve your website locally so you can preview it in your browser (only execute <strong>after</strong> running the build command).
+            <br>
+            <strong>❗Note:</strong> once you run the start command, 11ty will be keeping track of any changes you make to <strong>existing</strong> files and automatically re-render the preview in the browser. However, if you were to add a <strong>new</strong> file(s), I highly recommend you interrupt the local server by pressing on <kbd>Ctrl</kbd> + <kbd>C</kbd> in your terminal, re-running the build command and serving the website again.
+        </td>
+    </tr>
+    <tr>
+        <td><code>npx @11ty/eleventy --watch</code></td>
+        <td><code>npm run watch</code></td>
+        <td>
+            This will perform an initial build of your website and monitor for any changes, and re-build as necessary. However, this command does <strong>not</strong> start the local server, for that, you should be using the above command.
+        </td>
+    </tr>
+</table>
+<p>For the sake of brevity, the rest of this page will be using the custom commands.</p>
+<h4>🗃️ 11ty Project Structure</h4>
+<p>If you've been following along until now congratulations 🎉, you can finally start making your website.</p>
+<h5>🔧 Configuring the <code>.eleventy.js</code> file</h5>
+<p>Add the following to your <code>.eleventy.js</code> file:</p>
+<pre><code class="language-js">module.exports = function (eleventyConfig) {
+  return {
+    dir: {
+        input: &quot;src&quot;,
+        includes: &quot;_includes&quot;,      // this is where you'll define your base layout and other partials
+        data: &quot;_data&quot;               // this is where you'll define to be used across your website (note: 11ty can also pull data from databases and CMS, but I will not be covering that here)
+    }
+  };
+};
+</code></pre>
+<p>❗<strong>Note:</strong> you do <strong>not</strong> need to define a directory for the output generated by the build or watch commands. By default, 11ty will automatically create a <code>_site</code> folder for your website files at the root directory of your project. Should you wish to overwrite the name of the output folder, you can do so by adding the <code>output</code> property to <code>dir</code>. If you do this, naming the output folder <code>public</code> is best practice.</p>
+<p>❗<strong>Note:</strong> if you have any images, css or JavaScript files, I highly recommend you create an <code>assets</code> folder in the <code>src</code> directory and tell 11ty not process it during the build process by adding a pass through:</p>
+<pre><code class="language-js">module.exports = function (eleventyConfig) {
+
+    eleventyConfig.addPassthroughCopy({ &quot;src/assets&quot;: &quot;assets&quot; });
+
+    return {
+        dir: {
+            input: &quot;src&quot;,
+            includes: &quot;_includes&quot;,
+            data: &quot;_data&quot;
+        }
+    };
+};
+</code></pre>
+<h5>🏗️ Building your Website</h5>
+<p>11ty supports many templating languages that you can use and switch between when building your website (I used a mixture of Nunjucks and Markdown), including:</p>
+<ul>
+<li>HTML</li>
+<li>Markdown</li>
+<li>WebC</li>
+<li>JavaScript (*.11ty.js)</li>
+<li>Liquid</li>
+<li>Nunjuck</li>
+<li>Handlebars</li>
+<li>Mustache</li>
+<li>EJS</li>
+<li>Haml</li>
+<li>Pug</li>
+</ul>
+<p>Whichever, one(s) you use, your next step should be to create a base layout file in your <code>_includes</code> folder, which should just contain a base HTML shell with some placeholders for custom data. For example:
+<img src="/assets/images/base-layout.png" alt="Base Layout"></p>
+<p>Then you can create an <code>index</code> file in the root directory which might look like this:</p>
+<pre><code class="language-html">---
+title: My Portfolio Website
+header: My First Project with 11ty
+layout: layout.njk
+---
+
+&lt;p&gt;
+    This is my first attempt at using 11ty for a project
+&lt;/p&gt;
+</code></pre>
+<p>This will generate an <code>index.html</code> file in your <code>_site</code> folder whick should look like this:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;My Portfolio Website&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/assets/css/style.css&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;main&gt;
+        &lt;h1&gt;My First Project with 11ty&lt;/h1&gt;
+        &lt;p&gt;
+            This is my first attempt at using 11ty for a project
+        &lt;/p&gt;
+    &lt;/main&gt;
+    &lt;script src=&quot;/assets/js/index.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>❗<strong>Note:</strong> I am assuming you named your base layout file <code>layout.njk</code>. Also, pay close attention at how I am referencing my css and JavaScript files – this is mandatory since your output folder would look like this:</p>
+<pre><code class="language-bash">|- _site/
+    |- assets/
+        |- css/
+        |- js/
+    |- index.html
+</code></pre>
 
     </main>
     
