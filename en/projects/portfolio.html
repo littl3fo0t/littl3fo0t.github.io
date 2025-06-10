@@ -85,22 +85,25 @@
 
 <body>
     <main>
-        <h1>Portfolio Website</h1>
+        <p><a id="top"></a></p>
+<h1>Portfolio Website</h1>
 <h2>🔍 Project Overview</h2>
-<p>My portfolio website developed using <a href="https://www.11ty.dev/">Eleventy (11ty)</a> with the  <a href="https://www.11ty.dev/docs/i18n/">Internationalization (I18n)</a> plugin, and deployed to <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+<p>My portfolio website developed using <a href="https://www.11ty.dev/">Eleventy (11ty)</a> with the  <a href="https://www.11ty.dev/docs/i18n/">Internationalization (i18n)</a> plugin, and deployed to <a href="https://pages.github.com/">GitHub Pages</a>.</p>
 <p><a href="https://github.com/littl3fo0t/portfolio-11ty">Project Link</a> | <a href="https://littl3fo0t.github.io/">Demo</a></p>
 <h2>❓ What Did I Learn?</h2>
 <h3>🚀 TL;DR</h3>
 <ol>
 <li>Setting up an 11ty project.</li>
-<li>Setting up and building a multilingual website with the I18n plugin.</li>
+<li>Setting up and building a multilingual website with the i18n plugin.</li>
 <li>Wroking with <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a> (<code>.njk</code>) files.</li>
 <li>Working with collections in 11ty.</li>
 <li>Deploying a portfolio website to GitHub Pages.</li>
 </ol>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h3>⛔ Disclaimer</h3>
-<p>A small disclaimer before going any further; as the time of writing, 11ty is by far the most difficult technology I have worked with. It is extremely error prone with very generic error messages that make debugging hard. Most of the difficulty in this projects stems from the I18n plugin and the 11ty website itself having the bare minimum amount of documentation.</p>
+<p>A small disclaimer before going any further; as the time of writing, 11ty is by far the most difficult technology I have worked with. It is extremely error prone with very generic error messages that make debugging hard. Most of the difficulty in this projects stems from the i18n plugin and the 11ty website itself having the bare minimum amount of documentation.</p>
 <p>As usual with these project pages, I have done my best to fact-check everything I write. However, in this case, I have instead chosen to just leave a link to a relevant website regarding aspects that I did not fully comprehend. I’ll make sure to point these out as they appear.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h3>📁 Setting up a Project with 11ty</h3>
 <p>Creating an 11ty project is very easy, the only prerequisite is to have <code>node</code> installed on your computer, then you can follow the instructions below:</p>
 <ol>
@@ -115,6 +118,7 @@
 <pre><code class="language-bash">npm install --save-dev @11ty/eleventy
 </code></pre>
 <p><strong>Optional step:</strong> you can also create a <code>.gitignore</code> file which includes the <code>node_modules</code> folder.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h4>🔧 Configuring your 11ty Project</h4>
 <p>If you've followed the above instructions and take a look at your project directory, you'll see that with the exception of <code>node_modules</code>, <code>package.json</code> and <code>package-lock.json</code> (and <code>.gitignore</code> optionally), there is <strong>nothing</strong> else. This is normal, since 11ty is a &quot;zero-config&quot; tool by default. The next steps involve creating a <code>src</code> folder with a <code>.eleventy.js</code> (which will contain all of your project configuration). The <code>.eleventy.js</code> should look something like this:</p>
 <pre><code class="language-js">module.exports = function (eleventyConfig) {
@@ -137,9 +141,10 @@
 <pre><code class="language-bash">npx @11ty/eleventy
 </code></pre>
 <p>And you should see something like this:</p>
-<pre><code class="language-bash">[11ty] Wrote 0 files in 0.03 seconds (v3.1.0)
+<pre><code class="language-bash">[11ty] Wrote 0 files in 0.03 seconds (v3.1.1)
 </code></pre>
-<p>❗<strong>Note:</strong> at the time of writing, the latest version of 11ty is 3.1.0, yours might differ.</p>
+<p>❗<strong>Note:</strong> at the time of writing, the latest version of 11ty is 3.1.1, yours might differ.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h4>✨ Optional Step – Implement Custom Build Commands</h4>
 <p>Another optional, but highly recommended step, is to overwrite the default 11ty commands. This is done in the <code>package.json</code> file, under the <code>scripts</code> attribute by adding the following:</p>
 <pre><code class="language-json">{
@@ -180,8 +185,10 @@
     </tr>
 </table>
 <p>For the sake of brevity, the rest of this page will be using the custom commands.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h4>🗃️ 11ty Project Structure</h4>
 <p>If you've been following along until now congratulations 🎉, you can finally start making your website.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h5>🔧 Configuring the <code>.eleventy.js</code> file</h5>
 <p>Add the following to your <code>.eleventy.js</code> file:</p>
 <pre><code class="language-js">module.exports = function (eleventyConfig) {
@@ -209,6 +216,7 @@
     };
 };
 </code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
 <h5>🏗️ Building your Website</h5>
 <p>11ty supports many templating languages that you can use and switch between when building your website (I used a mixture of Nunjucks and Markdown), including:</p>
 <ul>
@@ -264,7 +272,223 @@ layout: layout.njk
         |- js/
     |- index.html
 </code></pre>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h3>💬 Setting up and Building a Multilingual Website</h3>
+<p>Here comes the part that made this project so tough to work on. I will be describing my experience below, but please keep in mind that since I was learning as I went, there might be aspects where I did not do things the right or efficient way.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>⬇️ Importing the i18n plugin</h4>
+<p>Here is the part that gave me the most trouble; as of version 2.0.0 of 11ty, the i18n plugin comes already bundled with the initial installation, meaning you <strong>do not</strong> need to install it separately from <code>npm</code>.</p>
+<p>The i18n plugin is imported and configured in your <code>.eleventy.js</code> file, and the 11ty website lists two different ways to do it, <strong>ESM</strong> and <strong>CommonJS</strong>, only the latter worked for me:</p>
+<pre><code class="language-js">module.exports = async function (eleventyConfig) {        // must be turned into an async function
+	const { I18nPlugin } = await import(&quot;@11ty/eleventy&quot;);  // import plugin
 
+	eleventyConfig.addPlugin(I18nPlugin, {                  // plugin configuration
+    defaultLanguage: &quot;en&quot;   // required - will be necessary for later
+  });
+}
+</code></pre>
+<p>I recommend you read more <a href="https://www.11ty.dev/docs/plugins/i18n/">here</a>.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>🗃️ How to Organize your Project Files</h4>
+<p>The 11ty and I recommend you create separate &quot;language&quot; folders for all of your files in the root directory. For example, since my website is in English and French, I have <code>/scr/en/</code> and <code>src/fr/</code> folders. Each folder has its own index page and any other files you might need.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>📝 Naming your Project Files</h4>
+<p>When it came to naming my project files, I opted for language-specific file names, because it made sense to me. For example, we have <code>/en/about.html</code> and <code>/fr/a-propos.html</code>.</p>
+<p>The 11ty website however documents a different approach and suggests keeping the file names the same (irrespective of the language), which allows the use of filters. You can read more <a href="https://www.11ty.dev/docs/plugins/i18n/">here</a>.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>↔️ Sharing Data aross your Project Files</h4>
+<p>Whichever approach you decide to adopt, you will have files - such as your base layout file or partials - which will only be defined <strong>once</strong> and as such must be implemented in such as way that it will have the correct display and behavior based on the current language.</p>
+<p>Again, not sure if I did things the right way here but, my approach was to create a JSON file in each language folder (<code>/en/en.json</code> and <code>/fr/fr.json</code>) to define the data that would be used in my layout file and partials. For example, in <code>en.json</code>, we could have something like this:</p>
+<pre><code class="language-js">{
+  &quot;greeting&quot;: &quot;Hello&quot;
+}
+</code></pre>
+<p>In <code>fr.json</code>:</p>
+<pre><code class="language-js">{
+  &quot;greeting&quot;: &quot;Bonjour&quot;
+}
+</code></pre>
+<p>Then you have to modify your <code>.eleventy.js</code> file accordingly:</p>
+<pre><code class="language-js">const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+
+module.exports = async function (eleventyConfig) {
+    const { I18nPlugin } = await import(&quot;@11ty/eleventy&quot;);
+
+    // Importing JSON files
+    const translations = {
+        en: JSON.parse(fs.readFileSync(path.resolve(__dirname, &quot;src&quot;, &quot;en&quot;, &quot;en.json&quot;))),
+        fr: JSON.parse(fs.readFileSync(path.resolve(__dirname, &quot;src&quot;, &quot;fr&quot;, &quot;fr.json&quot;)))
+    };
+    eleventyConfig.addPlugin(I18nPlugin, {
+        defaultLanguage: &quot;en&quot;,
+        translations: translations // adding variables to i18n configuration
+    });
+</code></pre>
+<p>Then you can use the<code>greeting</code> variable in your base layout file as such:
+<img src="/assets/images/sample-multilingual-greeting.png" alt="Sample multilingual greeting"></p>
+<p>So that when you run the build command, every file in your <code>en</code> folder that uses the base layout will have an <code>h1</code> element which looks like this:</p>
+<pre><code class="language-html">&lt;h1&gt;Hello&lt;/h1&gt;
+</code></pre>
+<p>And your files in your <code>fr</code> folder will have an <code>h1</code> element which looks like this:</p>
+<pre><code class="language-html">&lt;h1&gt;Bonjour&lt;/h1&gt;
+</code></pre>
+<p>❗<strong>Note:</strong> you might have noticed in the previous code snippet, I am making use of the <code>fs</code> and <code>path</code> modules to import my <code>/en/en.json</code> and <code>/fr/fr.json</code> files. Normally, this should not have been necessary. I should have been able to create a <code>js</code> file (say <code>i18n.js</code>) in the <code>_data</code> folder which imports the JSON files like this:</p>
+<pre><code class="language-js">module.exports = {
+    en: require(&quot;../en/en.json&quot;),
+    fr: require(&quot;../fr/fr.json&quot;)
+};
+</code></pre>
+<p>And then import it in my <code>.elventy.js</code> file as such:</p>
+<pre><code class="language-js">const i18nDataForPlugin = require(&quot;./src/_data/i18n.js&quot;);
+
+module.exports = async function (eleventyConfig) {
+    const { I18nPlugin } = await import(&quot;@11ty/eleventy&quot;);
+
+    eleventyConfig.addPlugin(I18nPlugin, {
+        defaultLanguage: &quot;en&quot;,
+        translations: i18nDataForPlugin // ⬅️
+    });
+</code></pre>
+<p>But for some reason, I could not get this approach would not work for me. So instead of spending any more time trying to debug this issue, I instead opted to use the <code>fs</code> and <code>path</code> modules instead.</p>
+<p>❗<strong>Note:</strong> below are some attributes I hightly suggest you include in your JSON files:</p>
+<table>
+    <tr>
+        <th>Attribute</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td><code>lang</code></td>
+        <td>
+          Specifies the language of the page. Used in the attribute of the same name in the <code>html</code> tag and can also be accessed via the 11ty <code>page</code> property with <code>page.lang</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>dir</code></td>
+        <td>
+            A global attribute that is used to specify the direction of which the text displayed on screen is meant to be read in. For example, in English and French, we read from <strong>left to right</strong>, so <code>dir="ltr"</code>. However, other languages such as Japanese are read from <strong>right to left</strong>, so <code>dir="rtl"</code>.
+            <br>
+            The <code>dir</code> attribute can be added to individual elements or at the <code>html</code> tag. Read more <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">here</a>.
+        </td>
+    </tr>
+</table>
+<p>Example:</p>
+<pre><code class="language-js">{
+  &quot;lang&quot;: &quot;en&quot;,
+  &quot;dir&quot;: &quot;ltr&quot;
+}
+</code></pre>
+<p><img src="/assets/images/lang-and-dir-example.png" alt="Setting lang and dir attributes"></p>
+<p>After running the build command, should output something like this:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;
+  &lt;!-- code omitted for brevity --&gt;
+&lt;/html&gt;
+</code></pre>
+<p>❗<strong>Note:</strong> if you've been reading along, one question you might have is &quot;ok, but which version of my website will my users land on?&quot;. And the answer is... none. Yes, if you start your local server and head to the URL in your terminal (typically: <code>localhost:8080</code>), you will find nothing but an error message along the lines of <code>Cannot GET/</code>. Indeed, to see the English version of your website for example, you would need to navigate to <code>localhost:8080/en/</code>, which is not ideal.</p>
+<p>From what I've seen and read, 11ty should have, or had, a <code>fallbackLocales</code> function which you could add to your <code>.eleventy.js</code> file to well, specify a directory to act as a fallback. But it either has been removed or never existed. Instead I opted to create a simple <code>index.html</code> file in the <code>scr</code> directory which contained a <code>script</code> tag that made use of the <code>navigator.language</code> method to get the user's broswer language and with the <code>window.location.href</code> method, redirect them to the appropriate directory.</p>
+<p>You can read more about the <code>navigator.language</code> method <a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/languages">here</a>.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h3>🥷 Working with Nunjucks</h3>
+<p>Nunjucks is a templating language which I have used in my portfolio project and resembles Python in it's syntax. Nunjucks has many features (which you can use alongside 11ty features) which I would rather you go see for youself <a href="https://mozilla.github.io/nunjucks/templating.html">here</a>, but at a surface level, you can:</p>
+<ol>
+<li>Assign variables:</li>
+</ol>
+<p><img src="/assets/images/njk-variable-example.png" alt="Assigning variables in Nunjucks"></p>
+<ol start="2">
+<li>Have conditional logic:</li>
+</ol>
+<p><img src="/assets/images/njk-conditional-example-1.png" alt="Conditional logic in Nunjucks 1"></p>
+<p><img src="/assets/images/njk-conditional-example-2.png" alt="Conditional logic in Nunjucks 2"></p>
+<ol start="3">
+<li>Perform loops:</li>
+</ol>
+<pre><code class="language-js">// fruits.json (or fruits.js)
+{
+  &quot;fruits&quot;: [
+    &quot;Apple&quot;,
+    &quot;Banana&quot;,
+    &quot;Orange&quot;,
+    &quot;Pear&quot;
+  ]
+}
+</code></pre>
+<p><img src="/assets/images/njk-loop-example.png" alt="Loops in nunjuck"></p>
+<ol start="4">
+<li>Define and use partials:</li>
+</ol>
+<pre><code class="language-html">&lt;!-- 
+With Nunjucks, we can define partials and use them in throughout our application.
+For example, the code below could be in a file called header.njk:
+--&gt;
+&lt;header&gt;
+  &lt;h1&gt;Some title&lt;/h1&gt;
+  &lt;p&gt;Some text&lt;/p&gt;
+&lt;/header&gt;
+</code></pre>
+<p><img src="/assets/images/njk-include-example.png" alt="Partials in Nunjucks"></p>
+<pre><code class="language-html">&lt;!-- 
+Which will generate the following output:
+--&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;!-- head tag omitted for brevity --&gt;
+  &lt;body&gt;
+    &lt;header&gt;
+    &lt;h1&gt;Some title&lt;/h1&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+  &lt;/header&gt;
+    &lt;!-- rest of body omitted for brevity --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Again, please refer to the official <a href="https://mozilla.github.io/nunjucks/">Nunjucks website</a> for the complete documentation.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h3>🥞 Working with Collections in 11ty</h3>
+<p>Collections in 11ty is a way to group related content together. This is done with the <code>tags</code> reserved keyword. For example, if you are creating a blog website that contains many posts, you might structure you files as such:</p>
+<pre><code class="language-bash">My-Blog/
+    |- src/
+      |- index.html
+      |- posts/
+        |- post-1.md
+        |- post-2.md
+        |- post-3.md
+    |- .eleventy.js
+</code></pre>
+<p>Then in each of your <code>post</code> files, you would have something like this at the top:</p>
+<pre><code class="language-md">---
+tags: post
+title: My First Post!
+---
+</code></pre>
+<p>This can will automatically create the <code>post</code> collection which can be accessed via the <code>collections.post</code> object, which could be used as such:
+<img src="/assets/images/collection-list-example.png" alt="Collections"></p>
+<p>❗<strong>Note:</strong> 11ty by default orders the items inside a collection by the file's created date. Should you wish to change that, you could overwrite the date value as such:</p>
+<pre><code class="language-md">---
+tags: post
+title: My First Post!
+date: 2025-01-01
+---
+</code></pre>
+<p>Or, you could also implment some custom sorting algorithm. As usual, I invite to read more about collections and how to use them <a href="https://www.11ty.dev/docs/collections/">here</a>.</p>
+<p>❗<strong>Note:</strong> when it comes to my portfolio website, I decided to have 2 separate collections - <code>collections.projects</code> (for English) and <code>collections.projets</code> (for French). There might have been a way to implement this logic just using a single collection - perhaps it involves keeping the file names the same across languages - but I am not sure.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h4>↔️ Navigating between items in a Collection</h4>
+<p>11ty has built-in methods to get information about the current item in a collection but also about the next and previous one (if any). The <code>getCollectionItem</code> method fetches the current item in a collection and you can use the <code>getPreviousCollectionItem</code> and <code>getNextCollectionItem</code> methods to navigate to the previous and next items respectively.</p>
+<p>See <a href="https://www.11ty.dev/docs/filters/collection-items/">here</a> for more details on these functions.</p>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
+<h3>⬆️ Deploying a Portfolio Website to GitHub Pages (the easy way)</h3>
+<p>Once you have completed your website with 11ty, you can run the build command to generate your files in the <code>_site</code> directory. From there, deploying them to GitHub pages is very easy.</p>
+<ol>
+<li>Log in or create an account on Github and create a new <strong>public</strong> repository that follows this naming convention: <code>[your username].github.io</code>.</li>
+<li>Once done, you should be prompted to add files to the repository. One of the options should allow you to add files by uploading them - click on that option.</li>
+<li>Head to your <code>_site</code> directory, press <kbd>Ctrl</kbd> + <kbd>A</kbd> to highlight everything, then click and drag all the files into your browser to upload them to GitHub.</li>
+<li>Wait for the file upload to finish and click on the option to commit to the <code>main</code> branch.</li>
+<li>Wait for GitHub to process the commit.</li>
+<li>Once done, you should see a little icon under the Deployments section of the page. If it is flashing yellow, this means that GitHub is still processing the deployment. If it is green, that means that the deployment is complete and your website is now live.</li>
+<li>Go to settings and under the Pages section, you should see a Visit site link that once clicked, should take you directly to your website. If not, you can search for it manually in the search bar by typing <code>https://[your username].github.io</code>.</li>
+</ol>
+<p class="back-to-top">(<a href="#top">back to top</a>)</p>
     </main>
     
         
